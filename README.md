@@ -39,7 +39,7 @@ exploit (shellshock)>
 
 And on our listening machine...
 
-![We have a catch](https://github.com/spencerdodd/pysploit/imgs/example-catch.png "catch img")
+![We have a catch](https://github.com/spencerdodd/pysploit/blob/master/imgs/example-catch.png "catch img")
 
 ### =-=-=-= To Do =-=-=-=
 
