@@ -39,7 +39,7 @@ exploit (shellshock)>
 
 And on our listening machine...
 
-[We have a catch!](http://imgur.com/a/pnayj)
+![We have a catch!](http://imgur.com/a/pnayj)
 
 ### =-=-=-= To Do =-=-=-=
 
