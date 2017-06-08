@@ -18,9 +18,9 @@ SESSION_INPUT_HELP_MESSAGE = """[*] Usage:
 EXPLOIT_INPUT_HELP_MESSAGE = """[*] Usage:
 	`exploit help`:						show these help commands
 	`exploit load [exploit name]`:  	load the exploit of the given name
-	`exploit search [search term]`: 	search for an exploit
+	`exploit options`:					shows the current values of exploit parameters
 	`exploit set [field] [value]`:		sets a field of the exploit
-	`exploit execute`: 					executes the loaded and configured exploit
+	`exploit run`: 					executes the loaded and configured exploit
 """
 INVALID_EXPLOIT_ERROR = "	[!] Invalid exploit. Please enter a valid exploit"
 EXPLOIT_LOAD_BEFORE_USE_MESSAGE = "	[!] Load exploit before checking options"
