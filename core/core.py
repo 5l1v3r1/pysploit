@@ -6,7 +6,9 @@ from pydoc import locate
 from core.session import Session
 from core.constants import 	INTEGER_VALUE_ERROR_MESSAGE, SESSION_INDEX_TYPE_ERROR, \
 							CORE_INPUT_HELP_MESSAGE, SESSION_INPUT_HELP_MESSAGE, \
-							EXPLOIT_INPUT_HELP_MESSAGE, INVALID_EXPLOIT_ERROR
+							EXPLOIT_INPUT_HELP_MESSAGE, INVALID_EXPLOIT_ERROR, \
+							INTRO_ART
+from network.handler import NetworkHandler
 
 
 class Core:
@@ -19,6 +21,8 @@ class Core:
 		self.active_session = None
 		# integer: index of the currently active session
 		self.active_session_index = 0
+		# <NetworkHandler>: self-explanatory
+		self.network_handler = None
 
 	def new_session(self):
 		"""Create a new session
@@ -169,6 +173,15 @@ class Core:
 
 		# give us a session to start with
 		self.new_session()
+
+		# start up the network handler
+		self.network_handler = NetworkHandler()
+
+		# intialize everything
+		print("[*]\tInitializing all the initializables")
+
+		# intro art
+		print(INTRO_ART)
 
 		while True:
 			try:

@@ -9,6 +9,17 @@ exercise for me so I learn how things actually work and stop being such a skid.
 ```
 $ pysploit.py
 [+]	New session created
+[*]	Starting the network handler
+	[+]	Network handler started successfully!
+[*]	Initializing all the initializables
+
+         ,__________    ,__
+        /   __      |  /  /
+       /   /_/  /|   \/  /
+      /   ,____/  \     /
+     /   /        /    /
+     `--'         `---' sploit
+
 $ pysploit> exploit load shellshock
 $ exploit (shellshock)> exploit options
 [~]	Exploit options	[~]

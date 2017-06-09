@@ -3,7 +3,7 @@ Session module for pysploit
 
 Handles interaction with a single host and exploitation of host
 """
-from core.constants import prompt, EXPLOIT_INPUT_HELP_MESSAGE, \
+from core.constants import PROMPT, EXPLOIT_INPUT_HELP_MESSAGE, \
 							EXPLOIT_LOAD_BEFORE_USE_MESSAGE
 
 class Session:
@@ -11,7 +11,7 @@ class Session:
 		self.name = "Unbound"
 		self.exploit = None
 		self.remote_connection = None
-		self.prompt = prompt["pysploit"]
+		self.prompt = PROMPT["pysploit"]
 		self.handler = None
 
 
