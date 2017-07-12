@@ -178,7 +178,7 @@ class Core:
 		self.network_handler = NetworkHandler()
 
 		# intialize everything
-		print("[*]\tInitializing all the initializables")
+		print("[*] Initializing all the initializables")
 
 		# intro art
 		print(INTRO_ART)

