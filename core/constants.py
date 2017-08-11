@@ -34,3 +34,6 @@ EXPLOIT_INPUT_HELP_MESSAGE = """[*] Usage:
 """
 INVALID_EXPLOIT_ERROR = "	[!] Invalid exploit. Please enter a valid exploit"
 EXPLOIT_LOAD_BEFORE_USE_MESSAGE = "	[!] Load exploit before checking options"
+
+REVERSE_TCP = "reverse_tcp"
+SESSION_BY_NAME_FAILURE = "Session by that name does not exist in core."

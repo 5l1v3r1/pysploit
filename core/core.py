@@ -1,14 +1,14 @@
 import os
 import sys
-import getopt
+import threading
 from pydoc import locate
 
 from core.session import Session
 from core.constants import 	INTEGER_VALUE_ERROR_MESSAGE, SESSION_INDEX_TYPE_ERROR, \
 							CORE_INPUT_HELP_MESSAGE, SESSION_INPUT_HELP_MESSAGE, \
 							EXPLOIT_INPUT_HELP_MESSAGE, INVALID_EXPLOIT_ERROR, \
-							INTRO_ART
-from network.handler import NetworkHandler
+							INTRO_ART, SESSION_BY_NAME_FAILURE
+from network.manager import NetworkManager
 
 
 class Core:
@@ -22,7 +22,7 @@ class Core:
 		# integer: index of the currently active session
 		self.active_session_index = 0
 		# <NetworkHandler>: self-explanatory
-		self.network_handler = None
+		self.network_manager = None
 
 	def new_session(self):
 		"""Create a new session
@@ -108,6 +108,32 @@ class Core:
 		#except ModuleNotFoundError as mnfe:
 		#	print ("{}\n\t[*] Entered: {}".format(INVALID_EXPLOIT_ERROR, exploit_module_name))
 
+
+	# TODO: remove?
+	def set_session_remote_connection(self, session_name, remote_connection):
+		"""Sets a remote connection for a session. Called by NetworkManager
+
+		:param session_name: nonce of the session to set the connection to
+		:param remote_connection: connection passed to session
+		"""
+
+		if self.get_session_by_name(session_name) != SESSION_BY_NAME_FAILURE:
+			self.get_session_by_name(session_name).set_connection(remote_connection)
+		else:
+			print("[*] Error, cannot pass connection to session. Session {} does not exist".format(session_name))
+
+	def get_session_by_name(self, session_name):
+		"""Returns a session in the core by its name. Error if no session exists by that name
+
+		:param session_name:
+		:return: Session or SESSION_BY_NAME_FAILURE
+		"""
+		for session in self.sessions:
+			if session.name == session_name:
+				return session
+			else:
+				return SESSION_BY_NAME_FAILURE
+
 	def display_core_help(self):
 		"""Display the help message for session commands"""
 
@@ -128,8 +154,12 @@ class Core:
 
 		...
 		"""
+		#input_context = self.get_input_context() # TODO this is a better way of doing commands
+
 		args = sploit_command.strip().split(" ")
-		if args[0] == "session":
+		if self.active_session.remote_connection is not None:
+			self.active_session.remote_connection.send_command(sploit_command)
+		elif args[0] == "session":
 			# process in context of session commands
 			if args[1] == "help":
 				print(SESSION_INPUT_HELP_MESSAGE)
@@ -168,16 +198,24 @@ class Core:
 			else:
 				print(CORE_INPUT_HELP_MESSAGE)
 
+	def preinput_processing(self):
+		"""
+		Ensures that we wait until timeout before passing on a sent request (twisted shell). Ensures that
+		requests and responses to external resources are printed and processed before the next input
+		sequence.
+		"""
+		print("[*] pre-processing before next input")
+		while self.active_session.waiting_on_response:
+			pass
+		print("[+] pre-processing complete")
+
 	def run(self):
 		"""Runs the core"""
 
 		# give us a session to start with
 		self.new_session()
 
-		# start up the network handler
-		self.network_handler = NetworkHandler()
-
-		# intialize everything
+		# initialize everything
 		print("[*] Initializing all the initializables")
 
 		# intro art
@@ -185,6 +223,7 @@ class Core:
 
 		while True:
 			try:
+				self.preinput_processing()
 				sploit_command = input("{}".format(self.get_prompt()))
 				self.process_input(sploit_command)
 			except KeyboardInterrupt as ke:
