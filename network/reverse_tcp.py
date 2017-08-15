@@ -72,6 +72,9 @@ class ReverseTCPHandler(threading.Thread):
 			print("[*] command history:")
 			for command in self.command_buffer[::-1]:
 				print("\t[+] {}\t\t :\t\t{}".format(command[0], command[1]))
+		elif command_to_send == "exit":
+			print("[*] exiting interactive shell and closing remote connection")
+			self.stop()
 		else:
 			print("[*] sending command: \'{}\'".format(command_to_send))
 			self.waiting_for_response = True
@@ -79,7 +82,10 @@ class ReverseTCPHandler(threading.Thread):
 			self.connection.send(bytes("{}\n".format(command_to_send), 'utf-8'))
 
 	def has_connection(self):
-		return self.connection is not None
+		if self.connection is not None and not self.connection._closed:		# is there a better way than <conn>._closed?
+			return True
+		else:
+			return False
 
 	def run(self):
 		# helps setup session
@@ -120,3 +126,5 @@ class ReverseTCPHandler(threading.Thread):
 		self.socket.close()
 		if not self.listener.stopped:
 			self.listener.stop()
+
+		print("[*] handler stopped")
