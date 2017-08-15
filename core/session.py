@@ -5,20 +5,19 @@ Handles interaction with a single host and exploitation of host
 """
 import uuid
 from core.constants import PROMPT, EXPLOIT_INPUT_HELP_MESSAGE, \
-							EXPLOIT_LOAD_BEFORE_USE_MESSAGE
-from network.manager import NetworkManager
-import threading
+							EXPLOIT_LOAD_BEFORE_USE_MESSAGE, REVERSE_TCP
+from network.reverse_tcp import ReverseTCPHandler
 
 class Session:
 	def __init__(self):
 		self.name = uuid.uuid4().hex
 		self.exploit = None
-		self.remote_connection = None
 		self.prompt = PROMPT["pysploit"]
 		self.handler = None
 
 		# state stuff
 		self.waiting_on_response = False
+		self.waiting_for_shell = False
 
 	def set_exploit(self, exploit_to_use):
 		"""Sets the session's exploit
@@ -39,10 +38,11 @@ class Session:
 
 		# TODO
 		# first check to update prompt
-		if self.exploit is not None:
+
+		if self.has_shell():
+			self.prompt = "remote@pwnd> "									# .format(self.handler.connection.ip)
+		elif self.exploit is not None:
 			self.prompt = "exploit ({})> ".format(self.exploit.vuln_name)
-		elif self.remote_connection is not None:
-			self.prompt = "remote@{}> ".format(self.remote_connection.ip)
 		return self.prompt
 
 	def set_exploit_field(self, exploit_field_args):
@@ -91,25 +91,26 @@ class Session:
 		error at the exploit level if all necessary options are not configured.
 		"""
 		if self.exploit is None:
-			print (EXPLOIT_LOAD_BEFORE_USE_MESSAGE)
-			print (EXPLOIT_INPUT_HELP_MESSAGE)
+			print(EXPLOIT_LOAD_BEFORE_USE_MESSAGE)
+			print(EXPLOIT_INPUT_HELP_MESSAGE)
 		else:
 			self.exploit.run()
 
-	def set_connection(self, remote_connection):
-		"""
-		Sets the connection of the session. Performed by connection protocol on connection.
-
-		:param connection:
-		"""
-		print("[*] Attaching remote connection to session")
-		self.remote_connection = remote_connection
-		print("[+] Remote connection attached to session successfully")
-
-	def update_waiting_on_response(self, waiting=False):
-		if waiting is True:
-			print("[*] waiting on remote response")
-			self.waiting_on_response = waiting
+	def waiting_before_input(self):
+		if self.handler is not None and self.handler.waiting_for_response:
+			return True
 		else:
-			print("[+] received remote response")
-			self.waiting_on_response = waiting
+			return False
+
+	def start_handler(self, type, host, port):
+		"""Starts a network handler of the given type on the given host and port"""
+		if type == REVERSE_TCP:
+			self.handler = ReverseTCPHandler(host, port)
+			self.handler.start()
+
+	def has_shell(self):
+		if self.handler is not None:
+			return self.handler.has_connection()
+
+	def send_command(self, command_to_send):
+		self.handler.send_command(command_to_send)

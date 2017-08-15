@@ -8,7 +8,6 @@ from core.constants import 	INTEGER_VALUE_ERROR_MESSAGE, SESSION_INDEX_TYPE_ERRO
 							CORE_INPUT_HELP_MESSAGE, SESSION_INPUT_HELP_MESSAGE, \
 							EXPLOIT_INPUT_HELP_MESSAGE, INVALID_EXPLOIT_ERROR, \
 							INTRO_ART, SESSION_BY_NAME_FAILURE
-from network.manager import NetworkManager
 
 
 class Core:
@@ -22,7 +21,6 @@ class Core:
 		# integer: index of the currently active session
 		self.active_session_index = 0
 		# <NetworkHandler>: self-explanatory
-		self.network_manager = None
 
 	def new_session(self):
 		"""Create a new session
@@ -108,20 +106,6 @@ class Core:
 		#except ModuleNotFoundError as mnfe:
 		#	print ("{}\n\t[*] Entered: {}".format(INVALID_EXPLOIT_ERROR, exploit_module_name))
 
-
-	# TODO: remove?
-	def set_session_remote_connection(self, session_name, remote_connection):
-		"""Sets a remote connection for a session. Called by NetworkManager
-
-		:param session_name: nonce of the session to set the connection to
-		:param remote_connection: connection passed to session
-		"""
-
-		if self.get_session_by_name(session_name) != SESSION_BY_NAME_FAILURE:
-			self.get_session_by_name(session_name).set_connection(remote_connection)
-		else:
-			print("[*] Error, cannot pass connection to session. Session {} does not exist".format(session_name))
-
 	def get_session_by_name(self, session_name):
 		"""Returns a session in the core by its name. Error if no session exists by that name
 
@@ -157,8 +141,8 @@ class Core:
 		#input_context = self.get_input_context() # TODO this is a better way of doing commands
 
 		args = sploit_command.strip().split(" ")
-		if self.active_session.remote_connection is not None:
-			self.active_session.remote_connection.send_command(sploit_command)
+		if self.active_session.has_shell():
+			self.active_session.send_command(sploit_command)
 		elif args[0] == "session":
 			# process in context of session commands
 			if args[1] == "help":
@@ -204,16 +188,18 @@ class Core:
 		requests and responses to external resources are printed and processed before the next input
 		sequence.
 		"""
-		print("[*] pre-processing before next input")
-		while self.active_session.waiting_on_response:
-			pass
-		print("[+] pre-processing complete")
+		# print("[*] Pre-processing before next input")
+		if self.active_session is not None:
+			while self.active_session.waiting_before_input():
+				pass
+		# print("[+] Pre-processing complete")
 
-	def run(self):
+	def run(self,new_startup_session=True):
 		"""Runs the core"""
 
 		# give us a session to start with
-		self.new_session()
+		if new_startup_session:
+			self.new_session()
 
 		# initialize everything
 		print("[*] Initializing all the initializables")
