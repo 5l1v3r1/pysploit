@@ -168,6 +168,8 @@ class Core:
 				self.active_session.show_exploit_options()
 			elif args[1] == "info":
 				self.active_session.show_exploit_info()
+			elif args[1] == "check":
+				self.active_session.check_exploit_vulnerability()
 			elif args[1] == "run":
 				self.active_session.run_exploit()
 			else:

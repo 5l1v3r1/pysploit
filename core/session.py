@@ -82,6 +82,18 @@ class Session:
 		else:
 			self.exploit.show_exploit_info()
 
+	def check_exploit_vulnerability(self):
+		"""
+		Checks loaded exploit for vulnerability
+
+		:return:
+		"""
+		if self.exploit is None:
+			print(EXPLOIT_LOAD_BEFORE_USE_MESSAGE)
+			print(EXPLOIT_INPUT_HELP_MESSAGE)
+		else:
+			self.exploit.check_vulnerability()
+
 	def run_exploit(self):
 		"""
 		Run a loaded exploit

@@ -44,7 +44,7 @@ class ReverseTCPHandler(threading.Thread):
 		super(ReverseTCPHandler, self).__init__()
 
 		self.host = host
-		self.port = port
+		self.port = int(port)
 		self.connection = None
 		self.socket = None
 		self.command_buffer = []
